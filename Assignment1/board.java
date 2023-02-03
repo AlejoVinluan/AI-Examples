@@ -4,23 +4,24 @@ import java.lang.Math;
 public class Board {
     private int[][] state;
 
-    public Board(){
+    public Board() {
         this.state = new int[3][3];
         generateBoard();
     }
 
     public Board(int[][] boardState) {
         this.state = new int[3][3];
-        for(int i = 0; i < boardState.length; i++){
-            for(int j = 0; j < boardState[i].length; j++){
+        for (int i = 0; i < boardState.length; i++) {
+            for (int j = 0; j < boardState[i].length; j++) {
                 this.state[i][j] = boardState[i][j];
             }
         }
     }
 
-    public void boardToString(){
-        for(int i = 0; i < this.state.length; i++){
-            for(int j = 0; j < this.state[i].length; j++){
+    public void boardToString() {
+        System.out.print("\n");
+        for (int i = 0; i < this.state.length; i++) {
+            for (int j = 0; j < this.state[i].length; j++) {
                 System.out.print(this.state[i][j] != 0 ? this.state[i][j] + " " : "* ");
             }
             System.out.print("\n");
@@ -70,18 +71,46 @@ public class Board {
         }
     }
 
-    public int[] findZero(){
-        for(int i = 0; i < 3; i++){
-            for(int j = 0; j < 3; j++){
-                if(this.state[i][j] == 0){
-                    return new int[]{i,j};
+    public int[] findZero() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (this.state[i][j] == 0) {
+                    return new int[] { i, j };
                 }
             }
         }
-        return new int[]{0,0};
+        return new int[] { 0, 0 };
     }
 
-    public void DFS() {
-        System.out.println("hi");
+    public int[][] getState() {
+        return this.state;
+    }
+
+    public void swapUp() {
+        int[] zeroLocation = findZero();
+        int temp = this.state[zeroLocation[0]-1][zeroLocation[1]];
+        this.state[zeroLocation[0]-1][zeroLocation[1]] = 0;
+        this.state[zeroLocation[0]][zeroLocation[1]] = temp;
+    }
+
+    public void swapDown() {
+        int[] zeroLocation = findZero();
+        int temp = this.state[zeroLocation[0]+1][zeroLocation[1]];
+        this.state[zeroLocation[0]+1][zeroLocation[1]] = 0;
+        this.state[zeroLocation[0]][zeroLocation[1]] = temp;
+    }
+
+    public void swapLeft() {
+        int[] zeroLocation = findZero();
+        int temp = this.state[zeroLocation[0]][zeroLocation[1]-1];
+        this.state[zeroLocation[0]][zeroLocation[1]-1] = 0;
+        this.state[zeroLocation[0]][zeroLocation[1]] = temp;
+    }
+
+    public void swapRight() {
+        int[] zeroLocation = findZero();
+        int temp = this.state[zeroLocation[0]][zeroLocation[1]+1];
+        this.state[zeroLocation[0]][zeroLocation[1]+1] = 0;
+        this.state[zeroLocation[0]][zeroLocation[1]] = temp;
     }
 }
