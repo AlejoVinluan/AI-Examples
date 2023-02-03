@@ -1,28 +1,27 @@
 import java.util.HashSet;
 import java.lang.Math;
 
-class Board {
-
-    static int[][] state;
+public class Board {
+    private int[][] state;
 
     public Board(){
-        state = new int[3][3];
+        this.state = new int[3][3];
         generateBoard();
     }
 
     public Board(int[][] boardState) {
-        state = new int[3][3];
+        this.state = new int[3][3];
         for(int i = 0; i < boardState.length; i++){
             for(int j = 0; j < boardState[i].length; j++){
-                state[i][j] = boardState[i][j];
+                this.state[i][j] = boardState[i][j];
             }
         }
     }
 
     public void boardToString(){
-        for(int i = 0; i < state.length; i++){
-            for(int j = 0; j < state[i].length; j++){
-                System.out.print(state[i][j] + " ");
+        for(int i = 0; i < this.state.length; i++){
+            for(int j = 0; j < this.state[i].length; j++){
+                System.out.print(this.state[i][j] != 0 ? this.state[i][j] + " " : "* ");
             }
             System.out.print("\n");
         }
@@ -67,8 +66,22 @@ class Board {
                 currIdx2++;
             }
 
-            state[randBoardLoc[0]][randBoardLoc[1]] = randNum;
+            this.state[randBoardLoc[0]][randBoardLoc[1]] = randNum;
         }
     }
 
+    public int[] findZero(){
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                if(this.state[i][j] == 0){
+                    return new int[]{i,j};
+                }
+            }
+        }
+        return new int[]{0,0};
+    }
+
+    public void DFS() {
+        System.out.println("hi");
+    }
 }
