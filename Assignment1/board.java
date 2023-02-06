@@ -1,7 +1,7 @@
 import java.util.HashSet;
 import java.lang.Math;
 
-public class Board {
+class Board {
     private int[][] state;
 
     public Board() {
@@ -9,11 +9,11 @@ public class Board {
         generateBoard();
     }
 
-    public Board(int[][] boardState) {
+    public Board(int[][] BoardState) {
         this.state = new int[3][3];
-        for (int i = 0; i < boardState.length; i++) {
-            for (int j = 0; j < boardState[i].length; j++) {
-                this.state[i][j] = boardState[i][j];
+        for (int i = 0; i < BoardState.length; i++) {
+            for (int j = 0; j < BoardState[i].length; j++) {
+                this.state[i][j] = BoardState[i][j];
             }
         }
     }
