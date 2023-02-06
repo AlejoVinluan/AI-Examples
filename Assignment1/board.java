@@ -3,6 +3,11 @@ import java.lang.Math;
 
 class Board {
     private int[][] state;
+    private int[][] goalState = new int[][]{
+        {7,8,1},
+        {6,0,2},
+        {5,4,3}
+    };
 
     public Board() {
         this.state = new int[3][3];
@@ -84,6 +89,18 @@ class Board {
 
     public int[][] getState() {
         return this.state;
+    }
+
+    public boolean isGoal(){
+        // NOTE: Arrays.equals() not working for some reason
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                if(state[i][j] != goalState[i][j]){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public void swapUp() {
