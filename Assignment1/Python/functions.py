@@ -96,14 +96,20 @@ def swapRight(state):
     else:
         return None
 
-def DFS(board):
+def DFS(board, maxDepth=None):
+    if not maxDepth:
+        maxDepth = 11
+    else:
+        maxDepth += 1
+    
     stack = []
     stack.append([copy.deepcopy(board.getState()),0,[]])
+    statesEnqueued = 0
     
     while(len(stack) != 0):
         currState, depth, history = stack.pop(0)
         
-        if depth >= 11:
+        if depth >= maxDepth:
             return None
         
         if currState == goalState:
@@ -117,6 +123,9 @@ def DFS(board):
                 else:
                     print(printBoard(state))
                 idx += 1
+                
+            print("Number of moves =", len(history)-1)
+            print("Number of states enqueued = ", statesEnqueued)
             return True
         
         if(swapUp(copy.deepcopy(currState))):
@@ -125,22 +134,25 @@ def DFS(board):
             swapUp(stateClone)
             historyClone.append(stateClone)
             stack.append([stateClone, depth + 1, historyClone])
+            statesEnqueued += 1
         if(swapDown(copy.deepcopy(currState))):
             stateClone = copy.deepcopy(currState)
             historyClone = copy.deepcopy(history)
             swapDown(stateClone)
             historyClone.append(stateClone)
             stack.append([stateClone, depth + 1, historyClone])
+            statesEnqueued += 1
         if(swapLeft(copy.deepcopy(currState))):
             stateClone = copy.deepcopy(currState)
             historyClone = copy.deepcopy(history)
             swapLeft(stateClone)
             historyClone.append(stateClone)
             stack.append([stateClone, depth + 1, historyClone])
+            statesEnqueued += 1
         if(swapRight(copy.deepcopy(currState))):
             stateClone = swapRight(copy.deepcopy(currState))
             historyClone = copy.deepcopy(history)
             swapRight(stateClone)
             historyClone.append(stateClone)
             stack.append([stateClone, depth + 1, historyClone])
-                    
+            statesEnqueued += 1
