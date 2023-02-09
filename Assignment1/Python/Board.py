@@ -4,14 +4,14 @@ class Board:
         self.state = [[0 for _ in range(3)] for _ in range (3)]
         self.readFile(file);
 
-        print("Board generated!")
+        print("Input (Any random position of the tiles): ")
         self.printBoard()
 
     def readFile(self, file):
         try:
             text = open(file, 'r')
         except:
-            print("Unable to find file.")
+            print("Unable to find file", file)
             exit(1)
         values = text.readline().split(' ')
         values_idx = 0

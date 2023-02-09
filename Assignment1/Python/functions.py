@@ -13,6 +13,38 @@ def printBoard(state):
         res += '\n'
     return res
 
+def printInitialState(state):
+    if not state:
+        return "null\n"
+    
+    res = ""
+    for i in range(3):
+        if i == 0:
+            for j in range(3):
+                res += state[i][j] + ' '
+            res += '\t(Initial input state)'
+        else:
+            for j in range(3):
+                res += state[i][j] + ' '
+        res += '\n'
+    return res
+            
+def printFinalState(state):
+    if not state:
+        return "null\n"
+    
+    res = ""
+    for i in range(3):
+        if i == 0:
+            for j in range(3):
+                res += state[i][j] + ' '
+            res += '\t(Goal state)'
+        else:
+            for j in range(3):
+                res += state[i][j] + ' '
+        res += '\n'
+    return res
+
 def findStar(state):
     for i in range(3):
         for j in range(3):
@@ -66,32 +98,49 @@ def swapRight(state):
 
 def DFS(board):
     stack = []
-    stack.append(copy.deepcopy(board.getState()))
-    depth = 0
+    stack.append([copy.deepcopy(board.getState()),0,[]])
     
     while(len(stack) != 0):
-        if depth >= 10:
-            print("Unable to find solution at depth 10.")
-            return
+        currState, depth, history = stack.pop(0)
         
-        currState = stack.pop(0)
+        if depth >= 11:
+            return None
+        
         if currState == goalState:
-            print("Goal state found!")
-            print("currState:", currState)
-            print("goalState:", goalState)
-            return
-        
-        print("depth", depth)
-        print(printBoard(currState))
+            print("Output (List of states starting from input to goal state, if found)")
+            idx = 0
+            for state in history:
+                if idx == 0:
+                    print(printInitialState(state))
+                elif idx == len(history)-1:
+                    print(printFinalState(state))
+                else:
+                    print(printBoard(state))
+                idx += 1
+            return True
         
         if(swapUp(copy.deepcopy(currState))):
-            stack.append(swapUp(copy.deepcopy(currState)))
+            stateClone = copy.deepcopy(currState)
+            historyClone = copy.deepcopy(history)
+            swapUp(stateClone)
+            historyClone.append(stateClone)
+            stack.append([stateClone, depth + 1, historyClone])
         if(swapDown(copy.deepcopy(currState))):
-            stack.append(swapDown(copy.deepcopy(currState)))
+            stateClone = copy.deepcopy(currState)
+            historyClone = copy.deepcopy(history)
+            swapDown(stateClone)
+            historyClone.append(stateClone)
+            stack.append([stateClone, depth + 1, historyClone])
         if(swapLeft(copy.deepcopy(currState))):
-            stack.append(swapLeft(copy.deepcopy(currState)))
+            stateClone = copy.deepcopy(currState)
+            historyClone = copy.deepcopy(history)
+            swapLeft(stateClone)
+            historyClone.append(stateClone)
+            stack.append([stateClone, depth + 1, historyClone])
         if(swapRight(copy.deepcopy(currState))):
-            stack.append(swapRight(copy.deepcopy(currState)))
-            
-        
-        
+            stateClone = swapRight(copy.deepcopy(currState))
+            historyClone = copy.deepcopy(history)
+            swapRight(stateClone)
+            historyClone.append(stateClone)
+            stack.append([stateClone, depth + 1, historyClone])
+                    

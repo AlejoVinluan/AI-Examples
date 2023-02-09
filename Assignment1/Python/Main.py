@@ -9,6 +9,7 @@ class Main:
         exit(1)
     
     board = Board.Board(sys.argv[1])
-    DFS(copy.deepcopy(board))
+    if not DFS(board):
+        print("Unable to find goal state at depth.")
     
 
