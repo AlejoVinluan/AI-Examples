@@ -103,7 +103,7 @@ def DFS(board, maxDepth=float("inf")):
         maxDepth += 1
     
     stack = []
-    stack.append([copy.deepcopy(board.getState()),0,[]])
+    stack.append([copy.deepcopy(board.getState()),0,[copy.deepcopy(board.getState())]])
     statesEnqueued = 0
     
     while(len(stack) != 0):
@@ -128,33 +128,29 @@ def DFS(board, maxDepth=float("inf")):
             print("Number of states enqueued = ", statesEnqueued)
             exit(0)
         
-        if(swapUp(copy.deepcopy(currState))):
-            stateClone = copy.deepcopy(currState)
+        upCopy = swapUp(copy.deepcopy(currState))
+        if(upCopy):
             historyClone = copy.deepcopy(history)
-            swapUp(stateClone)
-            historyClone.append(stateClone)
-            stack.append([stateClone, depth + 1, historyClone])
+            historyClone.append(upCopy)
+            stack.append([upCopy, depth + 1, historyClone])
             statesEnqueued += 1
-        if(swapDown(copy.deepcopy(currState))):
-            stateClone = copy.deepcopy(currState)
+        downCopy = swapDown(copy.deepcopy(currState))
+        if(downCopy):
             historyClone = copy.deepcopy(history)
-            swapDown(stateClone)
-            historyClone.append(stateClone)
-            stack.append([stateClone, depth + 1, historyClone])
+            historyClone.append(downCopy)
+            stack.append([downCopy, depth + 1, historyClone])
             statesEnqueued += 1
-        if(swapLeft(copy.deepcopy(currState))):
-            stateClone = copy.deepcopy(currState)
+        leftCopy = swapLeft(copy.deepcopy(currState))
+        if(leftCopy):
             historyClone = copy.deepcopy(history)
-            swapLeft(stateClone)
-            historyClone.append(stateClone)
-            stack.append([stateClone, depth + 1, historyClone])
+            historyClone.append(leftCopy)
+            stack.append([leftCopy, depth + 1, historyClone])
             statesEnqueued += 1
-        if(swapRight(copy.deepcopy(currState))):
-            stateClone = swapRight(copy.deepcopy(currState))
+        rightCopy = swapRight(copy.deepcopy(currState))
+        if(rightCopy):
             historyClone = copy.deepcopy(history)
-            swapRight(stateClone)
-            historyClone.append(stateClone)
-            stack.append([stateClone, depth + 1, historyClone])
+            historyClone.append(rightCopy)
+            stack.append([rightCopy, depth + 1, historyClone])
             statesEnqueued += 1
             
 def IDS(board, maxDepth=float("inf")):
@@ -194,42 +190,58 @@ def getManhattanDistance(state):
 def astar2(board):
     state = copy.deepcopy(board.getState())
     depth = 0
+    history = []
+    history.append(copy.deepcopy(state))
+    
     while state != goalState:
         if depth >= 11:
             return False
     
-    moves = []
-    # Get move that will return lowest hueristic
-    moves.append(getManhattanDistance(swapUp(copy.deepcopy(state))))
-    moves.append(getManhattanDistance(swapDown(copy.deepcopy(state))))
-    moves.append(getManhattanDistance(swapLeft(copy.deepcopy(state))))
-    moves.append(getManhattanDistance(swapRight(copy.deepcopy(state))))
+        moves = []
+        # Get move that will return lowest hueristic
+        moves.append(getManhattanDistance(swapUp(copy.deepcopy(state))))
+        moves.append(getManhattanDistance(swapDown(copy.deepcopy(state))))
+        moves.append(getManhattanDistance(swapLeft(copy.deepcopy(state))))
+        moves.append(getManhattanDistance(swapRight(copy.deepcopy(state))))
     
-    # Find min in moves
-    min_hueristic = min(moves)
-    min_idx = -1
-    for idx, val in range(len(moves)):
-        if val == min_hueristic:
-            min_idx = idx
+        # Find min in moves
+        min_hueristic = min(moves)
+        min_idx = -1
+        for idx, val in enumerate(moves):
+            if val == min_hueristic:
+                min_idx = idx
     
-    if min_idx == -1 or min_hueristic == float("inf"):
-        print("Unable to find best move.")
-        exit(1)
+        if min_idx == -1 or min_hueristic == float("inf"):
+            print("Unable to find best move.")
+            exit(1)
     
-    if min_idx == 0:
-        swapUp(state)
-    elif min_idx == 1:
-        swapDown(state)
-    elif min_idx == 2:
-        swapLeft(state)
-    elif min_idx == 3:
-        swapRight(state)
-    else:
-        print("Something went wrong")
-        exit(1)
+        if min_idx == 0:
+            swapUp(state)
+        elif min_idx == 1:
+            swapDown(state)
+        elif min_idx == 2:
+            swapLeft(state)
+        elif min_idx == 3:
+            swapRight(state)
+        else:
+            print("Something went wrong")
+            exit(1)
+        history.append(copy.deepcopy(state))
+        depth += 1
     
-    depth += 1
-    
-        
+    print("Output (List of states starting from input to goal state, if found)")
+    idx = 0
+    for state in history:
+        if idx == 0:
+            print(printInitialState(state))
+        elif idx == len(history)-1:
+            print(printFinalState(state))
+        else:
+            print(printBoard(state))
+        idx += 1
+                
+    print("Number of moves =", len(history)-1)
+    print("Number of states enqueued = ", len(history)-1)
+    exit(0)
         
     
