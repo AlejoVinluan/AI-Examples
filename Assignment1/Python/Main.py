@@ -23,9 +23,11 @@ class Main:
         if not IDS(board):
             print("Unable to find goal state at depth 10.\n")
     elif algo == 'astar1':
-        astar1(board)
+        if not astar1(board):
+            print("Unable to find goal state at depth 10.\n")
     elif algo == 'astar2':
-        astar2(board)
+        if not astar2(board):
+            print("Unable to find goal state at depth 10.\n")
     else:
         print("Something went wrong.")
             

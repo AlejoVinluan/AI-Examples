@@ -168,8 +168,20 @@ def findDigit(state, digit):
                 return [i,j]
     return [-1,-1]
 
+def getNumberOfWrongLocations(state, visited):
+    if not state or state in visited:
+        return float("inf")
+    
+    wrongLocations = 0
+    for i in range(3):
+        for j in range(3):
+            if state[i][j] != goalState[i][j]:
+                wrongLocations += 1
+    return wrongLocations
+
 def astar1(board):
     return None
+        
 
 def getManhattanDistance(state):
     if not state:
