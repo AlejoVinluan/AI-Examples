@@ -153,13 +153,8 @@ def DFS(board, maxDepth=float("inf")):
             stack.append([rightCopy, depth + 1, historyClone])
             statesEnqueued += 1
             
-def IDS(board, maxDepth=float("inf")):
-    if maxDepth == float("inf"):
-        maxDepth = 10
-    else:
-        maxDepth += 1
-        
-    for i in range(maxDepth):
+def IDS(board):
+    for i in range(10):
         if not DFS(board,i):
             print("Could not find solution at IDS depth", i)
         else:

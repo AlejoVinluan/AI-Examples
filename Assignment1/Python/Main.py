@@ -20,21 +20,8 @@ class Main:
         if not DFS(board):
             print("Unable to find goal state at depth 10.\n")
     elif algo == 'ids':        
-        if len(sys.argv) <= 3:
-            print("Did not find maximum depth argument. Using 10 as default.")
-            print("If you want to input a custom maximum depth, please use: ")
-            print("python3 Main.py IDS <file.txt> <maxDepth>\n")
-            if not IDS(board):
-                print("Unable to find goal state at depth.")
-                exit(0)
-        if not str.isdigit(sys.argv[3]):
-            print("Please ensure the maximum depth argument is an integer.")
-            print("Using 10 as default maximum depth.\n")
-            if not IDS(board):
-                print("Unable to find goal state at depth.")
-                exit(0)
-        if not IDS(board,int(sys.argv[3])):
-            print("Unable to find goal state at maximum specified depth.")
+        if not IDS(board):
+            print("Unable to find goal state at depth 10.\n")
     elif algo == 'astar1':
         astar1(board)
     elif algo == 'astar2':
