@@ -96,8 +96,8 @@ def swapRight(state):
     else:
         return None
 
-def DFS(board, maxDepth=None):
-    if not maxDepth:
+def DFS(board, maxDepth=float("inf")):
+    if maxDepth == float("inf"):
         maxDepth = 11
     else:
         maxDepth += 1
@@ -126,7 +126,7 @@ def DFS(board, maxDepth=None):
                 
             print("Number of moves =", len(history)-1)
             print("Number of states enqueued = ", statesEnqueued)
-            return True
+            exit(0)
         
         if(swapUp(copy.deepcopy(currState))):
             stateClone = copy.deepcopy(currState)
@@ -156,3 +156,80 @@ def DFS(board, maxDepth=None):
             historyClone.append(stateClone)
             stack.append([stateClone, depth + 1, historyClone])
             statesEnqueued += 1
+            
+def IDS(board, maxDepth=float("inf")):
+    if maxDepth == float("inf"):
+        maxDepth = 10
+    else:
+        maxDepth += 1
+        
+    for i in range(maxDepth):
+        if not DFS(board,i):
+            print("Could not find solution at IDS depth", i)
+        else:
+            return True
+    return False
+
+def findDigit(state, digit):
+    for i in range(3):
+        for j in range(3):
+            if state[i][j] == str(digit):
+                return [i,j]
+    return [-1,-1]
+
+def astar1(board):
+    return None
+
+def getManhattanDistance(state):
+    if not state:
+        return float("inf")
+    
+    manhattanDistance = 0
+    for i in range(1,9):
+        goalX, goalY = findDigit(goalState,i)
+        stateX, stateY = findDigit(state,i)
+        manhattanDistance += (abs(goalX-stateX) + abs(goalY-stateY))
+    return manhattanDistance
+
+def astar2(board):
+    state = copy.deepcopy(board.getState())
+    depth = 0
+    while state != goalState:
+        if depth >= 11:
+            return False
+    
+    moves = []
+    # Get move that will return lowest hueristic
+    moves.append(getManhattanDistance(swapUp(copy.deepcopy(state))))
+    moves.append(getManhattanDistance(swapDown(copy.deepcopy(state))))
+    moves.append(getManhattanDistance(swapLeft(copy.deepcopy(state))))
+    moves.append(getManhattanDistance(swapRight(copy.deepcopy(state))))
+    
+    # Find min in moves
+    min_hueristic = min(moves)
+    min_idx = -1
+    for idx, val in range(len(moves)):
+        if val == min_hueristic:
+            min_idx = idx
+    
+    if min_idx == -1 or min_hueristic == float("inf"):
+        print("Unable to find best move.")
+        exit(1)
+    
+    if min_idx == 0:
+        swapUp(state)
+    elif min_idx == 1:
+        swapDown(state)
+    elif min_idx == 2:
+        swapLeft(state)
+    elif min_idx == 3:
+        swapRight(state)
+    else:
+        print("Something went wrong")
+        exit(1)
+    
+    depth += 1
+    
+        
+        
+    
