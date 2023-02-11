@@ -96,12 +96,8 @@ def swapRight(state):
     else:
         return None
 
-def DFS(board, maxDepth=float("inf")):
-    if maxDepth == float("inf"):
-        maxDepth = 11
-    else:
-        maxDepth += 1
-    
+def DFS(board):
+    maxDepth = 11
     stack = []
     stack.append([copy.deepcopy(board.getState()),0,[copy.deepcopy(board.getState())]])
     statesEnqueued = 0
@@ -126,7 +122,7 @@ def DFS(board, maxDepth=float("inf")):
                 
             print("Number of moves =", len(history)-1)
             print("Number of states enqueued = ", statesEnqueued)
-            exit(0)
+            return True
         
         upCopy = swapUp(copy.deepcopy(currState))
         if(upCopy):
@@ -154,12 +150,61 @@ def DFS(board, maxDepth=float("inf")):
             statesEnqueued += 1
             
 def IDS(board):
-    for i in range(10):
-        if not DFS(board,i):
-            print("Could not find solution at IDS depth", i)
-        else:
-            return True
-    return False
+    statesEnqueued = 0
+    state = copy.deepcopy(board.getState())
+    for idsDepth in range(10):
+        stack = []
+        maxDepth = idsDepth + 1
+        stack.append([copy.deepcopy(board.getState()),0,[copy.deepcopy(board.getState())]])
+        while(len(stack) != 0):
+            currState, depth, history = stack.pop(0)
+        
+            if depth >= maxDepth:
+                break
+        
+            if currState == goalState:
+                print("Goal state found at IDS Depth", idsDepth )
+                print("Output (List of states starting from input to goal state, if found)")
+                idx = 0
+                for state in history:
+                    if idx == 0:
+                        print(printInitialState(state))
+                    elif idx == len(history)-1:
+                        print(printFinalState(state))
+                    else:
+                        print(printBoard(state))
+                    idx += 1
+                
+                print("Number of moves =", len(history)-1)
+                print("Number of states enqueued = ", statesEnqueued)
+                return True
+        
+            upCopy = swapUp(copy.deepcopy(currState))
+            if(upCopy):
+                historyClone = copy.deepcopy(history)
+                historyClone.append(upCopy)
+                stack.append([upCopy, depth + 1, historyClone])
+                statesEnqueued += 1
+            downCopy = swapDown(copy.deepcopy(currState))
+            if(downCopy):
+                historyClone = copy.deepcopy(history)
+                historyClone.append(downCopy)
+                stack.append([downCopy, depth + 1, historyClone])
+                statesEnqueued += 1
+            leftCopy = swapLeft(copy.deepcopy(currState))
+            if(leftCopy):
+                historyClone = copy.deepcopy(history)
+                historyClone.append(leftCopy)
+                stack.append([leftCopy, depth + 1, historyClone])
+                statesEnqueued += 1
+            rightCopy = swapRight(copy.deepcopy(currState))
+            if(rightCopy):
+                historyClone = copy.deepcopy(history)
+                historyClone.append(rightCopy)
+                stack.append([rightCopy, depth + 1, historyClone])
+                statesEnqueued += 1
+        
+        
 
 def findDigit(state, digit):
     for i in range(3):
@@ -168,8 +213,66 @@ def findDigit(state, digit):
                 return [i,j]
     return [-1,-1]
 
+def getNumberOfWrongLocations(state, visited):
+    if not state or state in visited:
+        return float('inf')
+    
+    wrongLocations = 0
+    for i in range(3):
+        for j in range(3):
+            if state[i][j] != goalState[i][j]:
+                wrongLocations += 1
+    return wrongLocations
+
 def astar1(board):
-    return None
+    visited = []
+    history = []
+    state = copy.deepcopy(board.getState())
+    depth = 0
+    
+    while state != goalState:
+        if depth > 10:
+            return False
+        
+        upCopy = swapUp(copy.deepcopy(state))
+        downCopy = swapDown(copy.deepcopy(state))
+        leftCopy = swapLeft(copy.deepcopy(state))
+        rightCopy = swapRight(copy.deepcopy(state))
+        
+        upHueristic = getNumberOfWrongLocations(upCopy, visited)
+        downHueristic = getNumberOfWrongLocations(downCopy, visited)
+        leftHueristic = getNumberOfWrongLocations(leftCopy, visited)
+        rightHueristic = getNumberOfWrongLocations(rightCopy, visited)
+    
+        minHueristic = min(upHueristic,downHueristic,leftHueristic,rightHueristic)
+        
+        if minHueristic == upHueristic and upCopy:
+            swapUp(state)
+        elif minHueristic == downHueristic and downCopy:
+            swapDown(state)
+        elif minHueristic == leftHueristic and leftCopy:
+            swapLeft(state)
+        elif minHueristic == rightHueristic and rightCopy:
+            swapRight(state)
+        visited.append(copy.deepcopy(state))
+        history.append(copy.deepcopy(state))
+        depth += 1
+        
+    print("Goal state found at depth", depth-1)
+    print("Output (List of states starting from input to goal state, if found)")
+    idx = 0
+    for state in history:
+        if idx == 0:
+            print(printInitialState(state))
+        elif idx == len(history)-1:
+            print(printFinalState(state))
+        else:
+            print(printBoard(state))
+        idx += 1
+    print("Number of moves =", len(history)-1)
+    print("Number of states enqueued = ", len(history)-1)
+    return True
+        
 
 def getManhattanDistance(state):
     if not state:
@@ -237,6 +340,6 @@ def astar2(board):
                 
     print("Number of moves =", len(history)-1)
     print("Number of states enqueued = ", len(history)-1)
-    exit(0)
+    return True
         
     
