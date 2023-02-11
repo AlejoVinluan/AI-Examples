@@ -1,6 +1,5 @@
 import sys
 import Board
-import copy
 from functions import DFS, IDS, astar1, astar2
 
 class Main:
@@ -30,6 +29,8 @@ class Main:
             print("Unable to find goal state at depth 10.\n")
     else:
         print("Something went wrong.")
+        exit(1)
+    exit(0)
             
             
 
