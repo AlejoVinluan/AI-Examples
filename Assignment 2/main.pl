@@ -1,0 +1,2 @@
+writeHello:-
+    write('HELLO').
