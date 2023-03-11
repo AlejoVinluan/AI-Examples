@@ -1,2 +1,0 @@
-writeHello:-
-    write('HELLO').
